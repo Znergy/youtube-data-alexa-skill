@@ -1,0 +1,14 @@
+GetSubscriberCount current subscriber count
+GetSubscriberCount subscriber count
+GetSubscriberCount number of subscribers
+GetSubscriberCount how many subscribers do I have
+
+GetVideoViewCount current video view count
+GetVideoViewCount video view count
+GetVideoViewCount number of video views
+GetVideoViewCount how many video views do I have
+
+GetVideoViewCountSinceDate current video view count {SinceDate}
+GetVideoViewCountSinceDate video view count {SinceDate}
+GetVideoViewCountSinceDate number of video views {SinceDate}
+GetVideoViewCountSinceDate how many video views do I have {SinceDate}
