@@ -46,6 +46,7 @@ exports.handler = (event, context) => {
             break;
 
           case "GetVideoViewCount":
+            console.log(event.request.intent.slots.SinceDate.value);
             var endpoint = "https://www.googleapis.com/youtube/v3/channels?part=statistics&id=channel_id&key=your_api_key" // ENDPOINT GOES HERE
             var body = ""
             https.get(endpoint, (response) => {
