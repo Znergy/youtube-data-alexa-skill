@@ -1,0 +1,29 @@
+{
+  "session": {
+    "sessionId": "SessionId.13faf975-751e-423a-b544-504508cbf38f",
+    "application": {
+      "applicationId": "amzn1.ask.skill.1c8143c3-ac1a-41fa-9993-85fff8935ce9"
+    },
+    "attributes": {},
+    "user": {
+      "userId": "amzn1.ask.account.AEK3XDESXD6FXTTEY64VXCAFZ7QBYDDHFEDTKADCCQMMM76EX7UFRC2IXPJIR3TVVIFHGVWURHEWQWWGFUKGQL5H27IHC7OFHC3VUBRPTMUYSDUS3P647AMRWUA6YOHUA5GGIG3TLOZBNBS72EWEBCBRSCRYRNYQHLP2N7OLV75X3SIIMGU67SM2DI4F66WDAWKRXVCHLABKQLI"
+    },
+    "new": true
+  },
+  "request": {
+    "type": "IntentRequest",
+    "requestId": "EdwRequestId.318f00b3-45a9-4a38-9b70-acb9b877004d",
+    "locale": "en-US",
+    "timestamp": "2017-05-15T22:13:11Z",
+    "intent": {
+      "name": "GetVideoViewCountSinceDate",
+      "slots": {
+        "SinceDate": {
+          "name": "SinceDate",
+          "value": "2017-05"
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}
