@@ -1,64 +1,126 @@
+var https = require('https')
+
 exports.handler = (event, context) => {
 
-// try block to fail gracefully
-try {
+  try {
 
-  if(event.session.new) {
-    // new session
-    console.log(`new session`);
-  }
+    if (event.session.new) {
+      // New Session
+      console.log("NEW SESSION")
+    }
 
-  switch (event.request.type) {
-    case "LaunchRequest":
-      // Launch Request
-      console.log(`Launch Request`);
-      // this sends a custom message and session state to buildSpeechletResponse
-      context.succeed(
-        generateResponse(
-          buildSpeechletResponse("Welcome to an Alexa Skill, this is running on a deployed lambda function", true),
-          {}
+    switch (event.request.type) {
+
+      case "LaunchRequest":
+        // Launch Request
+        console.log(`LAUNCH REQUEST`)
+        context.succeed(
+          generateResponse(
+            buildSpeechletResponse("Welcome to an Alexa Skill, this is running on a deployed lambda function", true),
+            {}
+          )
         )
-      )
-      break;
+        break;
 
-    case "IntentRequest":
-      // Intent Request
-      console.log(`Intent Request`);
-      break;
+      case "IntentRequest":
+        // Intent Request
+        console.log(`INTENT REQUEST`)
 
-    case "SessionEndedRequest":
-      // Session Ended Request
-      console.log(`Session Ended Request`);
-      break;
+        switch(event.request.intent.name) {
+          case "GetSubscriberCount":
+            var endpoint = "https://www.googleapis.com/youtube/v3/channels?part=statistics&id=channel_id&key=your_api_key" // ENDPOINT GOES HERE
+            var body = ""
+            https.get(endpoint, (response) => {
+              response.on('data', (chunk) => { body += chunk })
+              response.on('end', () => {
+                var data = JSON.parse(body)
+                var subscriberCount = data.items[0].statistics.subscriberCount
+                context.succeed(
+                  generateResponse(
+                    buildSpeechletResponse(`Current subscriber count is ${subscriberCount}`, true),
+                    {}
+                  )
+                )
+              })
+            })
+            break;
 
-    default:
-      context.fail(`Invalid Request Type: ${event.request.type}`)
-  }
+          case "GetVideoViewCount":
+            var endpoint = "https://www.googleapis.com/youtube/v3/channels?part=statistics&id=channel_id&key=your_api_key" // ENDPOINT GOES HERE
+            var body = ""
+            https.get(endpoint, (response) => {
+              response.on('data', (chunk) => { body += chunk })
+              response.on('end', () => {
+                var data = JSON.parse(body)
+                var viewCount = data.items[0].statistics.viewCount
+                context.succeed(
+                  generateResponse(
+                    buildSpeechletResponse(`Current view count is ${viewCount}`, true),
+                    {}
+                  )
+                )
+              })
+            })
+            break;
 
-} catch (error) { context.fail(`Exception: ${error}`) }
+          case "GetVideoViewCountSinceDate":
+            console.log(event.request.intent.slots.SinceDate.value)
+            var endpoint = "https://www.googleapis.com/youtube/v3/channels?part=statistics&id=channel_id&key=your_api_key" // ENDPOINT GOES HERE
+            var body = ""
+            https.get(endpoint, (response) => {
+              response.on('data', (chunk) => { body += chunk })
+              response.on('end', () => {
+                var data = JSON.parse(body)
+                var viewCount = data.items[0].statistics.viewCount
+                context.succeed(
+                  generateResponse(
+                    buildSpeechletResponse(`Current view count is ${viewCount}`, true),
+                    {}
+                  )
+                )
+              })
+            })
+            break;
 
-  // Helper Functions
+          default:
+            throw "Invalid intent"
+        }
 
-  buildSpeechletResponse = (outputText, shouldEndSession) => {
+        break;
 
-    return {
-      outputSpeech: {
-        type: "PlainText",
-        text: outputText
-      },
-      shouldEndSession: shouldEndSession
+      case "SessionEndedRequest":
+        // Session Ended Request
+        console.log(`SESSION ENDED REQUEST`)
+        break;
+
+      default:
+        context.fail(`INVALID REQUEST TYPE: ${event.request.type}`)
+
     }
+
+  } catch(error) { context.fail(`Exception: ${error}`) }
+
+}
+
+// Helper Functions
+buildSpeechletResponse = (outputText, shouldEndSession) => {
+
+  return {
+    outputSpeech: {
+      type: "PlainText",
+      text: outputText
+    },
+    shouldEndSession: shouldEndSession
   }
 
-  generateResponse = (sessionAttributes, speechletResponse) => {
+}
 
-    return {
-      version: "1.0",
-      sessionAttributes: sessionAttributes,
-      response: speechletResponse
-    }
+generateResponse = (speechletResponse, sessionAttributes) => {
+
+  return {
+    version: "1.0",
+    sessionAttributes: sessionAttributes,
+    response: speechletResponse
   }
-  // speechletResponse comes from buildSpeechletResponse
-  // tells alexa what to speak and if to end session or not
 
 }
